@@ -12,6 +12,8 @@ import re
 import subprocess
 import sys
 import time
+import logging
+
 from glob import glob
 from contextlib import closing, contextmanager
 
@@ -224,8 +226,8 @@ def prompt(text, key=None, default='', validate=None):
                 except Exception, e:
                     # Reset value so we stay in the loop
                     value = None
-                    print("Validation failed for the following reason:")
-                    print(indent(e.message) + "\n")
+                    logging.debug("Validation failed for the following reason:")
+                    logging.debug(indent(e.message) + "\n")
             # String / regex must match and will be empty if validation fails.
             else:
                 # Need to transform regex into full-matching one if it's not.
@@ -235,7 +237,7 @@ def prompt(text, key=None, default='', validate=None):
                     validate += r'$'
                 result = re.findall(validate, value)
                 if not result:
-                    print("Regular expression validation failed: '%s' does not match '%s'\n" % (value, validate))
+                    logging.debug("Regular expression validation failed: '%s' does not match '%s'\n" % (value, validate))
                     # Reset value so we stay in the loop
                     value = None
     # At this point, value must be valid, so update env if necessary
@@ -832,7 +834,7 @@ def _execute(channel, command, pty=True, combine_stderr=None,
         if output.running \
             and (output.stdout and stdout_buf and not stdout_buf.endswith("\n")) \
             or (output.stderr and stderr_buf and not stderr_buf.endswith("\n")):
-            print("")
+            logging.debug("")
 
         return stdout_buf, stderr_buf, status
 
@@ -906,9 +908,9 @@ def _run_command(command, shell=True, pty=True, combine_stderr=True,
         # Execute info line
         which = 'sudo' if sudo else 'run'
         if output.debug:
-            print("[%s] %s: %s" % (env.host_string, which, wrapped_command))
+            logging.debug("[%s] %s: %s" % (env.host_string, which, wrapped_command))
         elif output.running:
-            print("[%s] %s: %s" % (env.host_string, which, given_command))
+            logging.debug("[%s] %s: %s" % (env.host_string, which, given_command))
 
         # Actual execution, stdin/stdout/stderr handling, and termination
         result_stdout, result_stderr, status = _execute(
@@ -1155,9 +1157,9 @@ def local(command, capture=False, shell=None):
     with_env = _prefix_env_vars(command, local=True)
     wrapped_command = _prefix_commands(with_env, 'local')
     if output.debug:
-        print("[localhost] local: %s" % (wrapped_command))
+        logging.debug("[localhost] local: %s" % (wrapped_command))
     elif output.running:
-        print("[localhost] local: " + given_command)
+        logging.debug("[localhost] local: " + given_command)
     # Tie in to global output controls as best we can; our capture argument
     # takes precedence over the output settings.
     dev_null = None

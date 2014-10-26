@@ -2,6 +2,7 @@ from __future__ import with_statement
 
 import random
 import sys
+import logging
 
 from nose.tools import eq_, ok_, assert_true, assert_false, assert_equal
 import fudge
@@ -222,7 +223,7 @@ def test_global_parallel_honors_runs_once():
     """
     @decorators.runs_once
     def mytask():
-        print("yolo") # 'Carpe diem' for stupid people!
+        logging.debug("yolo") # 'Carpe diem' for stupid people!
     with settings(hide('everything'), parallel=True):
         execute(mytask, hosts=['localhost', '127.0.0.1'])
     result = sys.stdout.getvalue()

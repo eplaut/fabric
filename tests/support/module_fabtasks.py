@@ -1,6 +1,8 @@
+import logging
+
 def hello():
-    print("hello")
+    logging.debug("hello")
 
 
 def world():
-    print("world")
+    logging.debug("world")

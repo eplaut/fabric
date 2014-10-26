@@ -2,6 +2,7 @@
 Console/terminal user interface functionality.
 """
 
+import logging
 from fabric.api import prompt
 
 
@@ -35,4 +36,4 @@ def confirm(question, default=True):
         if response in ['n', 'no']:
             return False
         # Didn't get empty, yes or no, so complain and loop
-        print("I didn't understand you. Please specify '(y)es' or '(n)o'.")
+        logging.debug("I didn't understand you. Please specify '(y)es' or '(n)o'.")

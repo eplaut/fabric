@@ -132,6 +132,7 @@ import socket
 import select
 import sys
 import os
+import logging
 try:
     import threading
 except ImportError:
@@ -328,11 +329,11 @@ class BaseServer:
         The default is to print a traceback and continue.
 
         """
-        print('-' * 40)
-        print('Exception happened during processing of request from %s' % (client_address,))
+        logging.debug('-' * 40)
+        logging.debug('Exception happened during processing of request from %s' % (client_address,))
         import traceback
         traceback.print_exc()  # XXX But this goes to stderr!
-        print('-' * 40)
+        logging.debug('-' * 40)
 
 
 class TCPServer(BaseServer):

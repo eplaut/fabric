@@ -9,6 +9,7 @@ import fabric.version
 # But nothing is stopping us from making a convenient binding!
 _version = fabric.version.get_version
 
+import logging
 from utils import msg
 
 
@@ -89,13 +90,13 @@ def tag(force='no', push='no'):
         # If the tag doesn't exist, the user has already updated version info
         # and we can just move on.
         else:
-            print("Version has already been updated, no need to edit...")
+            logging.debug("Version has already been updated, no need to edit...")
         # Similar process but for the changelog.
         changelog = "docs/changelog.rst"
         if not current_version_is_changelogged(changelog):
             changed.append(update_code(changelog, force))
         else:
-            print("Changelog already updated, no need to edit...")
+            logging.debug("Changelog already updated, no need to edit...")
         # Commit any changes
         if changed:
             with msg("Committing updated version and/or changelog"):

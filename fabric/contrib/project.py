@@ -3,8 +3,9 @@ Useful non-core functionality, e.g. functions composing multiple operations.
 """
 from __future__ import with_statement
 
-from os import getcwd, sep
-import os.path
+from os import getcwd, sep, path
+import logging
+
 from datetime import datetime
 from tempfile import mkdtemp
 
@@ -145,7 +146,7 @@ def rsync_project(
         cmd = "rsync %s %s:%s %s" % (options, remote_prefix, remote_dir, local_dir)
 
     if output.running:
-        print("[%s] rsync_project: %s" % (env.host_string, cmd))
+        logging.debug("[%s] rsync_project: %s" % (env.host_string, cmd))
     return local(cmd, capture=capture)
 
 

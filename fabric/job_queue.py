@@ -8,6 +8,7 @@ items, though within Fabric itself only ``Process`` objects are used/supported.
 from __future__ import with_statement
 import time
 import Queue
+import logging
 
 from fabric.state import env
 from fabric.network import ssh
@@ -68,7 +69,7 @@ class JobQueue(object):
         the last throws of the job_queue's run are negated.
         """
         if self._debug:
-            print("job queue closed.")
+            logging.debug("job queue closed.")
 
         self._closed = True
 
@@ -87,7 +88,7 @@ class JobQueue(object):
             self._queued.append(process)
             self._num_of_jobs += 1
             if self._debug:
-                print("job queue appended %s." % process.name)
+                logging.debug("job queue appended %s." % process.name)
 
     def run(self):
         """
@@ -116,7 +117,7 @@ class JobQueue(object):
             """
             job = self._queued.pop()
             if self._debug:
-                print("Popping '%s' off the queue and starting it" % job.name)
+                logging.debug("Popping '%s' off the queue and starting it" % job.name)
             with settings(clean_revert=True, host_string=job.name, host=job.name):
                 job.start()
             self._running.append(job)
@@ -130,7 +131,7 @@ class JobQueue(object):
             raise Exception("Need to close() before starting.")
 
         if self._debug:
-            print("Job queue starting.")
+            logging.debug("Job queue starting.")
 
         while len(self._running) < self._max:
             _advance_the_queue()
@@ -144,17 +145,17 @@ class JobQueue(object):
                 for id, job in enumerate(self._running):
                     if not job.is_alive():
                         if self._debug:
-                            print("Job queue found finished proc: %s." %
+                            logging.debug("Job queue found finished proc: %s." %
                                     job.name)
                         done = self._running.pop(id)
                         self._completed.append(done)
 
                 if self._debug:
-                    print("Job queue has %d running." % len(self._running))
+                    logging.debug("Job queue has %d running." % len(self._running))
 
             if not (self._queued or self._running):
                 if self._debug:
-                    print("Job queue finished.")
+                    logging.debug("Job queue finished.")
 
                 for job in self._completed:
                     job.join()
@@ -204,7 +205,7 @@ def try_using(parallel_type):
         """
         Simple function to give a simple task to execute.
         """
-        print(number)
+        logging.debug(number)
 
     if parallel_type == "multiprocessing":
         from multiprocessing import Process as Bucket

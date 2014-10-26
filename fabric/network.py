@@ -11,6 +11,7 @@ import re
 import time
 import socket
 import sys
+import logging
 from StringIO import StringIO
 
 
@@ -89,7 +90,7 @@ def get_gateway(host, port, cache, replace=False):
         # ensure initial gateway connection
         if replace or gateway not in cache:
             if output.debug:
-                print "Creating new gateway connection to %r" % gateway
+                logging.debug("Creating new gateway connection to %r" % gateway)
             cache[gateway] = connect(*normalize(gateway) + (cache, False))
         # now we should have an open gw connection and can ask it for a
         # direct-tcpip channel to the real target. (bypass cache's own
@@ -608,7 +609,7 @@ def prompt_for_password(prompt=None, no_colon=False, stream=None):
     # Otherwise, loop until user gives us a non-empty password (to prevent
     # returning the empty string, and to avoid unnecessary network overhead.)
     while not new_password:
-        print("Sorry, you can't enter an empty password. Please try again.")
+        logging.debug("Sorry, you can't enter an empty password. Please try again.")
         new_password = _password_prompt(password_prompt, stream)
     return new_password
 

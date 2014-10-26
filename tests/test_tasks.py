@@ -6,6 +6,7 @@ import unittest
 from nose.tools import eq_, raises, ok_
 import random
 import sys
+import logging
 
 import fabric
 from fabric.tasks import WrappedCallableTask, execute, Task, get_task_details
@@ -153,7 +154,7 @@ def test_decorator_closure_hiding():
     """
     from fabric.decorators import task, hosts
     def foo():
-        print(env.host_string)
+        logging.debug(env.host_string)
     foo = task(hosts("me@localhost")(foo))
     eq_(["me@localhost"], foo.hosts)
 

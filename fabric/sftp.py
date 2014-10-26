@@ -5,6 +5,7 @@ import os
 import posixpath
 import stat
 import re
+import logging
 from fnmatch import filter as fnfilter
 
 from fabric.state import output, connections, env
@@ -143,7 +144,7 @@ class SFTP(object):
                 local_path = os.path.join(local_path, path_vars['basename'])
 
         if output.running:
-            print("[%s] download: %s <- %s" % (
+            logging.debug("[%s] download: %s <- %s" % (
                 env.host_string,
                 _format_local(local_path, local_is_path),
                 remote_path
@@ -237,7 +238,7 @@ class SFTP(object):
             basename = os.path.basename(local_path)
             remote_path = posixpath.join(remote_path, basename)
         if output.running:
-            print("[%s] put: %s -> %s" % (
+            logging.debug("[%s] put: %s -> %s" % (
                 env.host_string,
                 _format_local(local_path, local_is_path),
                 posixpath.join(pre, remote_path)

@@ -7,7 +7,7 @@ which in turn needs access to this version information.)
 """
 from subprocess import Popen, PIPE
 from os.path import abspath, dirname
-
+import logging
 
 VERSION = (1, 10, 0, 'final', 0)
 
@@ -105,4 +105,4 @@ def get_version(form='short'):
 __version__ = get_version('short')
 
 if __name__ == "__main__":
-    print(get_version('all'))
+    logging.debug(get_version('all'))
