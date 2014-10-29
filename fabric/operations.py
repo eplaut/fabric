@@ -733,8 +733,14 @@ def _execute(channel, command, pty=True, combine_stderr=None,
     program's return code, if applicable.
     """
     # stdout/stderr redirection
-    stdout = stdout or sys.stdout
-    stderr = stderr or sys.stderr
+    stdout = stdout or logging.info
+    if not hasattr(stdout,'write'):
+        stdout.write = stdout
+        stdout.flush = lambda: None
+    stderr = stderr or logging.error
+    if not hasattr(stderr,'write'):
+        stderr.write = stderr
+        stderr.flush = lambda: None
 
     # Timeout setting control
     timeout = env.command_timeout if (timeout is None) else timeout
